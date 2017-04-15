@@ -146,27 +146,6 @@ public String readLine() throws IOException{
        return reader.readLine();
 }
 
-
-public void parseLine(String line, LineStorage line_storage) {
-
-        // parse the line
-        // the default delimiter set for StringTokenizer
-        // is the set " \t\n\r\f" of characters
-        // (Note that the delimiter characters are not
-        // themselves treated as tokens)
-        StringTokenizer tokenizer = new StringTokenizer(line);
-
-        // if this is not an empty line add a new empty line
-        // to the line storage
-        if (tokenizer.countTokens() > 0)
-            line_storage.addEmptyLine();
-
-        // add all words from this line to the last line
-        while (tokenizer.hasMoreTokens())
-            line_storage.addWord(tokenizer.nextToken(), line_storage.getLineCount() - 1);
-
-}
-
 //----------------------------------------------------------------------
 /**
  * Inner classes

@@ -161,17 +161,16 @@ public class KWIC{
         // line printer
         Output output = new Output();
 
-        while(true){
+        while (true) {
             System.out.print("Add, Print, Quit:");
-            try{
-                String line=input.readLine();
-                switch (line){
+            try {
+                String line = input.readLine();
+                switch (line) {
                     case "a":
-                        line=input.readLine();
-                        input.parseLine(line, lines);
+                        line = input.readLine();
+                        shifter.makeShifts(line);
                         continue;
                     case "p":
-                        shifter.setup(lines);
                         alphabetizer.alpha(shifter);
                         output.print(alphabetizer);
                         continue;
@@ -183,7 +182,7 @@ public class KWIC{
                         continue;
 
                 }
-            }catch(IOException e){
+            } catch (IOException e) {
                 System.err.println("KWIC Error: Could not read a line.");
                 e.printStackTrace();
             }

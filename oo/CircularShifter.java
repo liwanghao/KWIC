@@ -1,23 +1,23 @@
 // -*- Java -*-
 /*
  * <copyright>
- * 
+ *
  *  Copyright (c) 2002
  *  Institute for Information Processing and Computer Supported New Media (IICM),
  *  Graz University of Technology, Austria.
- * 
+ *
  * </copyright>
- * 
+ *
  * <file>
- * 
+ *
  *  Name:    CircularShifter.java
- * 
+ *
  *  Purpose: Holds circular shifts of input lines
- * 
- *  Created: 23 Sep 2002 
- * 
+ *
+ *  Created: 23 Sep 2002
+ *
  *  $Id$
- * 
+ *
  *  Description:
  *    Holds circular shifts of input lines
  * </file>
@@ -34,7 +34,7 @@ package kwic.oo;
  *  a set of lines. A set of lines may be passed to a CircularShifter object,
  *  which produces all circular shifts and stores them internally.
  *  In principle, the CircularShifter class provides a
- *  similar interface as the LineStorage class, thus allowing to manipulate 
+ *  similar interface as the LineStorage class, thus allowing to manipulate
  *  the lines that it holds. However, in the case of the CircularShifter
  *  class the lines are actually circular shifts of a particular set of original
  *  lines. Also, the CircularShifter class does not provide interface for
@@ -93,19 +93,19 @@ public class CircularShifter{
 
         // initialize the shifts instance variable
     shifts_ = new LineStorage();
-    
+
         // iterate through all lines from the original set
     for(int i = 0; i < lines.getLineCount(); i++){
-      
+
           // current line
       String[] line = lines.getLine(i);
-      
+
           // iterate through all words of the current line
       for(int j = 0; j < line.length; j++){
-        
+
             // add a new empty line for the current shift
         shifts_.addEmptyLine();
-        
+
             // add all words of the current shift
         for(int k = j; k < (line.length + j); k++)
 
@@ -114,13 +114,13 @@ public class CircularShifter{
           shifts_.addWord(line[k % line.length], shifts_.getLineCount() - 1);
 
       }
-      
+
     }
   }
 
 //----------------------------------------------------------------------
 /**
- * Gets the character from the specified position in the specified word 
+ * Gets the character from the specified position in the specified word
  * in a particular line
  * @param position character index in the word
  * @param word word index in the line
@@ -203,6 +203,32 @@ public class CircularShifter{
   public int getLineCount(){
     return shifts_.getLineCount();
   }
+
+public void makeShifts(String line) {
+
+        // initialize the shifts instance variable
+        if (shifts_ == null) {
+            shifts_ = new LineStorage();
+        }
+
+        String[] lines=line.split(" ");
+
+        // iterate through all words of the current line
+        for (int j = 0; j < lines.length; j++) {
+
+            // add a new empty line for the current shift
+            shifts_.addEmptyLine();
+
+            // add all words of the current shift
+            for (int k = j; k < (lines.length + j); k++)
+
+                // add current word to the last line
+                // index is the remainder of dividing k and line.length
+                shifts_.addWord(lines[k % lines.length], shifts_.getLineCount() - 1);
+
+        }
+
+}
 
 //----------------------------------------------------------------------
 /**
