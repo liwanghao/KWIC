@@ -1,29 +1,31 @@
 // -*- Java -*-
 /*
  * <copyright>
- * 
+ *
  *  Copyright (c) 2002
  *  Institute for Information Processing and Computer Supported New Media (IICM),
  *  Graz University of Technology, Austria.
- * 
+ *
  * </copyright>
- * 
+ *
  * <file>
- * 
+ *
  *  Name:    KWIC.java
- * 
+ *
  *  Purpose: The Master Control class
- * 
- *  Created: 20 Sep 2002 
- * 
+ *
+ *  Created: 20 Sep 2002
+ *
  *  $Id$
- * 
+ *
  *  Description:
  *    The Master Control class
  * </file>
 */
 
 package kwic.oo;
+
+import java.io.IOException;
 
 /*
  * $Log$
@@ -82,7 +84,7 @@ public class KWIC{
   public void execute(String file){
 
         // initialize all variables
-    
+
         // storage for original lines
     LineStorage lines = new LineStorage();
 
@@ -104,7 +106,7 @@ public class KWIC{
 
         // make all circular shifts of the original set of lines
     shifter.setup(lines);
-    
+
         // sort all shifts alphabetically
     alphabetizer.alpha(shifter);
 
@@ -114,9 +116,9 @@ public class KWIC{
 
 //----------------------------------------------------------------------
 /**
- * Main function checks the command line arguments. The program expects 
- * exactly one command line argument specifying the name of the file 
- * that contains the data. If the program has not been started with 
+ * Main function checks the command line arguments. The program expects
+ * exactly one command line argument specifying the name of the file
+ * that contains the data. If the program has not been started with
  * proper command line arguments, main function exits
  * with an error message. Otherwise, a KWIC instance is created and program
  * control is passed to it.
@@ -124,15 +126,70 @@ public class KWIC{
  * @return void
  */
 
-  public static void main(String[] args){
-    if(args.length != 1){
-      System.err.println("KWIC Usage: java kwic.ms.KWIC file_name");
-      System.exit(1);
+    public static void main(String[] args) {
+        KWIC kwic = new KWIC();
+        switch (args.length) {
+            case 0:
+                kwic.execute();
+                break;
+            case 1:
+                kwic.execute(args[0]);
+                break;
+            default:
+                System.err.println("Error args.");
+                System.exit(1);
+
+        }
+
     }
 
-    KWIC kwic = new KWIC();
-    kwic.execute(args[0]);
-  }
+    private void execute() {
+        // initialize all variables
+
+        // storage for original lines
+        LineStorage lines = new LineStorage();
+
+        // input reader
+        Input input = new Input();
+
+        // circular shifter
+        CircularShifter shifter = new CircularShifter();
+
+        // alphabetizer
+        Alphabetizer alphabetizer = new Alphabetizer();
+
+        // line printer
+        Output output = new Output();
+
+        while(true){
+            System.out.print("Add, Print, Quit:");
+            try{
+                String line=input.readLine();
+                switch (line){
+                    case "a":
+                        line=input.readLine();
+                        input.parseLine(line, lines);
+                        continue;
+                    case "p":
+                        shifter.setup(lines);
+                        alphabetizer.alpha(shifter);
+                        output.print(alphabetizer);
+                        continue;
+                    case "q":
+                        System.exit(0);
+                        break;
+                    default:
+                        System.out.println("Wrong input, please try again.");
+                        continue;
+
+                }
+            }catch(IOException e){
+                System.err.println("KWIC Error: Could not read a line.");
+                e.printStackTrace();
+            }
+        }
+
+    }
 
 //----------------------------------------------------------------------
 /**

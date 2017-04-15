@@ -1,23 +1,23 @@
 // -*- Java -*-
 /*
  * <copyright>
- * 
+ *
  *  Copyright (c) 2002
  *  Institute for Information Processing and Computer Supported New Media (IICM),
  *  Graz University of Technology, Austria.
- * 
+ *
  * </copyright>
- * 
+ *
  * <file>
- * 
+ *
  *  Name:    Input.java
- * 
+ *
  *  Purpose: Input reads and parses the KWIC input file
- * 
- *  Created: 20 Sep 2002 
- * 
+ *
+ *  Created: 20 Sep 2002
+ *
  *  $Id$
- * 
+ *
  *  Description:
  *    Input reads and parses the KWIC input file
  * </file>
@@ -30,14 +30,14 @@ package kwic.oo;
 */
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.FileNotFoundException;
-
+import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
 /**
- *  An object of the Input class is responsible for reading and parsing the content of 
+ *  An object of the Input class is responsible for reading and parsing the content of
  *  a KWIC input file. The format of the KWIC input file is as follows:
  *  <ul>
  *  <li>Lines are separated by the line separator character(s) (on Unix '\n', on Windows '\r\n')
@@ -93,7 +93,7 @@ public class Input{
 
   public void parse(String file, LineStorage line_storage){
     try{
-      
+
           // open the file for reading
       BufferedReader reader = new BufferedReader(new FileReader(file));
 
@@ -101,14 +101,14 @@ public class Input{
           // (Note that all line feed chracters are removed by the readLine() method)
       String line = reader.readLine();
       while(line != null){
-        
+
             // parse the line
             // the default delimiter set for StringTokenizer
             // is the set " \t\n\r\f" of characters
             // (Note that the delimiter characters are not
             // themselves treated as tokens)
         StringTokenizer tokenizer = new StringTokenizer(line);
-        
+
             // if this is not an empty line add a new empty line
             // to the line storage
         if(tokenizer.countTokens() > 0)
@@ -117,11 +117,11 @@ public class Input{
             // add all words from this line to the last line
         while(tokenizer.hasMoreTokens())
           line_storage.addWord(tokenizer.nextToken(), line_storage.getLineCount() - 1);
-        
+
             // read next line
         line = reader.readLine();
       }
-      
+
     }catch(FileNotFoundException exc){
 
           // handle the exception if the file could not be found
@@ -130,14 +130,42 @@ public class Input{
       System.exit(1);
 
     }catch(IOException exc){
-      
+
           // handle other system I/O exception
       exc.printStackTrace();
       System.err.println("KWIC Error: Could not read " + file + "file.");
       System.exit(1);
-      
+
     }
   }
+
+
+public String readLine() throws IOException{
+
+       BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+       return reader.readLine();
+}
+
+
+public void parseLine(String line, LineStorage line_storage) {
+
+        // parse the line
+        // the default delimiter set for StringTokenizer
+        // is the set " \t\n\r\f" of characters
+        // (Note that the delimiter characters are not
+        // themselves treated as tokens)
+        StringTokenizer tokenizer = new StringTokenizer(line);
+
+        // if this is not an empty line add a new empty line
+        // to the line storage
+        if (tokenizer.countTokens() > 0)
+            line_storage.addEmptyLine();
+
+        // add all words from this line to the last line
+        while (tokenizer.hasMoreTokens())
+            line_storage.addWord(tokenizer.nextToken(), line_storage.getLineCount() - 1);
+
+}
 
 //----------------------------------------------------------------------
 /**
