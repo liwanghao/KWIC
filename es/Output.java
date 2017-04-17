@@ -1,29 +1,31 @@
 // -*- Java -*-
 /*
  * <copyright>
- * 
+ *
  *  Copyright (c) 2002
  *  Institute for Information Processing and Computer Supported New Media (IICM),
  *  Graz University of Technology, Austria.
- * 
+ *
  * </copyright>
- * 
+ *
  * <file>
- * 
+ *
  *  Name:    Output.java
- * 
+ *
  *  Purpose: Output prints sorted lines in a nice format
- * 
- *  Created: 05 Nov 2002 
- * 
+ *
+ *  Created: 05 Nov 2002
+ *
  *  $Id$
- * 
+ *
  *  Description:
  *    Output prints sorted lines in a nice format
  * </file>
 */
 
 package kwic.es;
+
+import java.util.HashMap;
 
 /*
  * $Log$
@@ -66,13 +68,17 @@ public class Output{
  */
 
   public void print(LineStorageWrapper shift_storage){
-    
+
         // iterate through all lines
     for(int i = 0; i < shift_storage.getLineCount(); i++)
-      
+
           // print current line
       System.out.println(shift_storage.getLineAsString(i));
   }
+
+public void print(HashMap<String, Integer> indexes) {
+    System.out.println(indexes.toString());
+}
 
 //----------------------------------------------------------------------
 /**
