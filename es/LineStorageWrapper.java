@@ -1,23 +1,23 @@
 // -*- Java -*-
 /*
  * <copyright>
- * 
+ *
  *  Copyright (c) 2002
  *  Institute for Information Processing and Computer Supported New Media (IICM),
  *  Graz University of Technology, Austria.
- * 
+ *
  * </copyright>
- * 
+ *
  * <file>
- * 
+ *
  *  Name:    LineStorageWrapper.java
- * 
+ *
  *  Purpose: Wraps LineStorage class providing Observable functionality to it
- * 
- *  Created: 05 Nov 2002 
- * 
+ *
+ *  Created: 05 Nov 2002
+ *
  *  $Id$
- * 
+ *
  *  Description:
  *    LineStorageWrapper class wraps LineStorage class in order to extend
  *  its functionality.
@@ -34,7 +34,7 @@ import java.util.Observable;
 
 /**
  *  LineStorageWrapper class wraps LineStorage class in order to extend
- *  its functionality. The added functionality allows objects of the 
+ *  its functionality. The added functionality allows objects of the
  *  LineStorageClass to be "observed" by other objects in the system. The
  *  "observation" mechanism works as follows. Whenever an object of
  *  LineStorageWrapper class changes, it generates and sends a message
@@ -91,12 +91,13 @@ public class LineStorageWrapper extends Observable{
  */
 
   public void addLine(String[] words){
-    
+
         // add the line
     lines_.addLine(words);
-    
+
+    String line = lines_.getLineAsString(getLineCount()-1);
         // create a new change event
-    LineStorageChangeEvent event = new LineStorageChangeEvent(LineStorageChangeEvent.ADD);
+    LineStorageChangeEvent event = new LineStorageChangeEvent(LineStorageChangeEvent.ADD, line);
 
         // set change flag for this object
         // we need to do this, otherwise observers won't be notified
@@ -120,13 +121,13 @@ public class LineStorageWrapper extends Observable{
  */
 
   public void insertLine(String[] words, int index){
-    
+
         // insert the line
     lines_.insertLine(words, index);
 
         // keep the line so we can create an event object
     String line = lines_.getLineAsString(index);
-    
+
         // create a new change event
     LineStorageChangeEvent event = new LineStorageChangeEvent(LineStorageChangeEvent.INSERT, line);
 
@@ -140,7 +141,7 @@ public class LineStorageWrapper extends Observable{
 
 //----------------------------------------------------------------------
 /**
- * Deletes a line from this line storage wrapper. The deleted line resides at 
+ * Deletes a line from this line storage wrapper. The deleted line resides at
  * the specified index in the storage. After deleting the line all observers
  * of this object are notified about the change.
  * @param index position from where to delete the line
@@ -154,10 +155,10 @@ public class LineStorageWrapper extends Observable{
 
         // keep the line so we can create an event object
     String line = lines_.getLineAsString(index);
-    
+
         // delete the line
     lines_.deleteLine(index);
-    
+
         // create a new change event
     LineStorageChangeEvent event = new LineStorageChangeEvent(LineStorageChangeEvent.DELETE, line);
 
@@ -186,7 +187,7 @@ public class LineStorageWrapper extends Observable{
 
 //----------------------------------------------------------------------
 /**
- * Gets the line from the specified index. 
+ * Gets the line from the specified index.
  * @param index position from where to get the line
  * @return String[]
  * @see #addLine

@@ -95,7 +95,7 @@ public class KWIC{
  * Fields
  *
  */
-    HashMap<String, Integer> indexes = new HashMap<>();
+
 
 //----------------------------------------------------------------------
 
@@ -187,6 +187,8 @@ private void execute() {
 
 
         // initialize all variables
+
+        HashMap<String, Integer> indexes = new HashMap<>();
         // storage for original lines
         LineStorageWrapper lines = new LineStorageWrapper();
 
@@ -204,10 +206,14 @@ private void execute() {
         // line printer
         Output output = new Output();
 
+        WordIndexer wordindexer = new WordIndexer(indexes);
+
         // declare interest in tracking changes
         lines.addObserver(shifter);
         // declare interest in tracking changes
         shifts.addObserver(alphabetizer);
+
+        lines.addObserver(wordindexer);
 
     while (true) {
         System.out.print("Add, Delete, Print, Index, Quit:");
@@ -218,7 +224,6 @@ private void execute() {
                     line = input.readLine();
                     String[] words=line.split(" ");
                     lines.addLine(words);
-                    modifyIndexes(line, "add");
                     continue;
                 case "d":
                     line = input.readLine();
@@ -227,7 +232,6 @@ private void execute() {
                         System.out.println("error");
                     }else{
                         lines.deleteLine(line_index);
-                        modifyIndexes(line,"delete");
                     }
                     continue;
                 case "p":
@@ -248,38 +252,6 @@ private void execute() {
         } catch (IOException e) {
             System.err.println("KWIC Error: Could not read a line.");
             e.printStackTrace();
-        }
-    }
-}
-
-/**
- * @param line 要处理的输入行
- * @param type 指示是删除操作还是添加操作
- */
-private void modifyIndexes(String line, String type) {
-
-
-    String[] words = line.split("\\s+");
-
-    for(int i=0;i<words.length;i++){
-        Integer counts=indexes.get(words[i]);
-        switch(type){
-            case "delete":
-                if(counts.intValue()==1){
-                    indexes.remove(words[i]);
-                }else{
-                    indexes.put(words[i],counts-1);
-                }
-                break;
-            case "add":
-                if(counts==null){
-                    indexes.put(words[i], 1);
-                }else{
-                    indexes.put(words[i], counts+1);
-                }
-                break;
-            default:
-                break;
         }
     }
 }
