@@ -227,7 +227,7 @@ private void execute() {
                     continue;
                 case "d":
                     line = input.readLine();
-                    int line_index=getIndexOfLine(line,lines);
+                    int line_index=lines.getIndexOfLine(line);
                     if(line_index==-1){
                         System.out.println("error");
                     }else{
@@ -254,25 +254,6 @@ private void execute() {
             e.printStackTrace();
         }
     }
-}
-
-/**
- * @param line 要查找的行
- * @param lines 行存储
- * @return 该行所在的index
- */
-private int getIndexOfLine(String line, LineStorageWrapper lines) {
-    int index=-1;
-    String current_line;
-    for(int i=0;i<lines.getLineCount();i++){
-        current_line=lines.getLineAsString(i);
-        if(current_line.equals(line)){
-            index=i;
-            break;
-        }
-
-    }
-    return index;
 }
 
 //----------------------------------------------------------------------

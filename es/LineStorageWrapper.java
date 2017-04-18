@@ -209,6 +209,20 @@ public class LineStorageWrapper extends Observable{
     return lines_.getLineCount();
   }
 
+public int getIndexOfLine(String line) {
+    int index=-1;
+    String current_line;
+    for(int i=0;i<lines_.getLineCount();i++){
+        current_line=lines_.getLineAsString(i);
+        if(current_line.equals(line)){
+            index=i;
+            break;
+        }
+
+    }
+    return index;
+}
+
 
 //----------------------------------------------------------------------
 /**
